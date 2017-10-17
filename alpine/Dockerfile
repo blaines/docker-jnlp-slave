@@ -27,7 +27,7 @@ USER root
 RUN apk add --no-cache \
 		ca-certificates
 ENV DOCKER_CHANNEL stable
-ENV DOCKER_VERSION 17.06.0-ce
+ENV DOCKER_VERSION 17.09.0-ce
 ENV DOCKER_COMPOSE_VERSION 1.16.1
 # TODO ENV DOCKER_SHA256
 # https://github.com/docker/docker-ce/blob/5b073ee2cf564edee5adca05eee574142f7627bb/components/packaging/static/hash_files !!
@@ -55,10 +55,6 @@ RUN set -ex; \
 		echo >&2 "error: failed to download 'docker-${DOCKER_VERSION}' from '${DOCKER_CHANNEL}' for '${dockerArch}'"; \
 		exit 1; \
 	fi; \
-	if ! curl -fL -o /usr/local/bin/docker-compose "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-linux-${dockerArch}"; then \
-		echo >&2 "error: failed to download 'docker-compose-${DOCKER_COMPOSE_VERSION}' from '${DOCKER_CHANNEL}' for '${dockerArch}'"; \
-		exit 1; \
-	fi; \
 	\
 	tar --extract \
 		--file docker.tgz \
@@ -70,8 +66,7 @@ RUN set -ex; \
 	apk del .fetch-deps; \
 	\
 	dockerd -v; \
-	docker -v; \
-    chmod +x /usr/local/bin/docker-compose;
+	docker -v;
 # END from Docker
 RUN echo 'http://dl-cdn.alpinelinux.org/alpine/v3.4/community' >> /etc/apk/repositories \
   && apk --update add make \
@@ -85,4 +80,5 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/v3.4/community' >> /etc/apk/repos
   groff \
   less && \
   pip --no-cache-dir install awscli && \
+  pip --no-cache-dir install docker-compose && \
   rm -rf /var/cache/apk/*
