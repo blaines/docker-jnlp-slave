@@ -80,5 +80,5 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/v3.4/community' >> /etc/apk/repos
   groff \
   less && \
   pip --no-cache-dir install awscli && \
-  pip --no-cache-dir install docker-compose && \
+  pip --no-cache-dir install docker-compose==${DOCKER_COMPOSE_VERSION} && \
   rm -rf /var/cache/apk/*
