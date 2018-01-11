@@ -29,6 +29,8 @@ RUN apk add --no-cache \
 ENV DOCKER_CHANNEL stable
 ENV DOCKER_VERSION 17.09.0-ce
 ENV DOCKER_COMPOSE_VERSION 1.16.1
+ENV SAM_VERSION 0.2.4
+
 # TODO ENV DOCKER_SHA256
 # https://github.com/docker/docker-ce/blob/5b073ee2cf564edee5adca05eee574142f7627bb/components/packaging/static/hash_files !!
 # (no SHA file artifacts on download.docker.com yet as of 2017-06-07 though)
@@ -82,3 +84,9 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/v3.4/community' >> /etc/apk/repos
   pip --no-cache-dir install awscli && \
   pip --no-cache-dir install docker-compose==${DOCKER_COMPOSE_VERSION} && \
   rm -rf /var/cache/apk/*
+
+RUN apk add --no-cache curl && \
+    curl -sSLO https://github.com/awslabs/aws-sam-local/releases/download/v${SAM_VERSION}/sam_${SAM_VERSION}_linux_amd64.tar.gz && \
+    tar -C /usr/local/bin -zxvf sam_${SAM_VERSION}_linux_amd64.tar.gz && \
+    apk del curl && \
+    rm -f /sam_${SAM_VERSION}_linux_amd64.tar.gz
